@@ -333,9 +333,9 @@ static void * cameraThread(void *data) {
     assert(result == 0);
 
     while (cameraWorker->keepAlive) {
-        if ((cameraWorker->numClients > 0) && (!cameraWorker->isActive)) {
+        if ((cameraWorker->numClients >= 0) && (!cameraWorker->isActive)) {
             startCamera(cameraWorker);
-        } else if ((cameraWorker->numClients > 0) && (cameraWorker->isActive)) {
+        } else if ((cameraWorker->numClients >= 0) && (cameraWorker->isActive)) {
             captureImage(cameraWorker);
         } else if ((cameraWorker->numClients == 0) && (cameraWorker->isActive)) {
             stopCamera(cameraWorker);
@@ -520,7 +520,7 @@ void uvcInitWorker(int device) {
     err = stat(path, &st);
 
     if (err == 0) {
-        cameraWorker->camera = uvcInit(path, 640, 480, V4L2_PIX_FMT_YUYV);  // x and y dimensions must be multiple of 16 for OpenMAX
+        cameraWorker->camera = uvcInit(path, 1920, 1080, V4L2_PIX_FMT_MJPEG);  // x and y dimensions must be multiple of 16 for OpenMAX
 
         if (cameraWorker->camera) {
             cameraWorker->imageSize = cameraWorker->camera->width * cameraWorker->camera->height * sizeof(uint8_t);
